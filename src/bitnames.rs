@@ -70,7 +70,9 @@ impl BitNamesState {
     ) -> Result<(), Error> {
         for output in &transaction.outputs {
             match output.content {
-                ddk::types::Content::Custom(BitName::KeyValue { key, .. }) => {
+                ddk::types::Content::Custom(BitName::KeyValue {
+                    key, ..
+                }) => {
                     if self.key_to_value.get(txn, &key)?.is_some() {
                         return Err(Error::KeyAlreadyExists);
                     }
@@ -150,7 +152,10 @@ impl State<ddk::authorization::Authorization, BitName> for BitNamesState {
         for transaction in &body.transactions {
             for output in &transaction.outputs {
                 match output.content {
-                    ddk::types::Content::Custom(BitName::KeyValue { key, value }) => {
+                    ddk::types::Content::Custom(BitName::KeyValue {
+                        key,
+                        value,
+                    }) => {
                         // In practice this means just updating all of the heed dbs according to
                         // consensus rules.
                         self.key_to_value.put(txn, &key, &value)?;
